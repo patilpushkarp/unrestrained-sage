@@ -7,7 +7,7 @@ This site is just to keep a record of whatever I learn and correct myself with t
 
 *Please correct me wherever I am wrong!*
 
-*Please feel to drop me a note on anything you feel about this site or me on - patilpushkarp@live.com* 
+*Please feel to drop me a note on anything you feel about this site or me* 
 
 ```{note}
 It may happen that I may forget to give required credits to the concerned authority(s), in that case please reach out to me on my email address i.e. patilpushkarp@live.com.
