@@ -1,0 +1,615 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Techniques of feature selection &#8212; Unrestrained Sage</title>
+    
+  <link rel="stylesheet" href="../../../../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+
+    
+  <link rel="stylesheet"
+    href="../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../../../../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../../../../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/sphinx-book-theme.e7340bb3dbd8dde6db86f25597f54a1b.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../../../../_static/js/index.d3f166471bb80abb5163.js">
+
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/togglebutton.js"></script>
+    <script src="../../../../_static/clipboard.min.js"></script>
+    <script src="../../../../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../../../_static/sphinx-book-theme.7d483ff0a819d6edff12ce0b1ead3928.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../../../../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Supervised Learning" href="../../supervised_learning/supervised_learning.html" />
+    <link rel="prev" title="Feature Extraction Techniques" href="feature_extraction_techniques.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../../../../index.html">
+  
+  
+  <h1 class="site-logo" id="site-title">Unrestrained Sage</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../../intro.html">
+   Namaste !
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Machine Learning
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../introduction_to_ml.html">
+   Machine Learning
+  </a>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../../generalization/generalization.html">
+   Generalization
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../generalization/k_fold_cv.html">
+     Cross Validation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../generalization/data_leakage.html">
+     Data Leakage
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 current active collapsible-parent">
+  <a class="reference internal" href="../preprocessing_intro.html">
+   Preprocessing
+  </a>
+  <ul class="current collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../missing_data.html">
+     Missing Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../feature_scaling.html">
+     Feature Tuning I - Feature Scaling
+    </a>
+   </li>
+   <li class="toctree-l2 current active collapsible-parent">
+    <a class="reference internal" href="dimensionality_reduction.html">
+     Dimensionality Reduction
+    </a>
+    <ul class="current collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="feature_extraction_techniques.html">
+       Feature Extraction Techniques
+      </a>
+     </li>
+     <li class="toctree-l3 current active">
+      <a class="current reference internal" href="#">
+       Techniques of feature selection
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../../supervised_learning/supervised_learning.html">
+   Supervised Learning
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2 collapsible-parent">
+    <a class="reference internal" href="../../supervised_learning/classification/classification.html">
+     Classification
+    </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../supervised_learning/classification/logistic_regression.html">
+       Logistic Regression
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../supervised_learning/classification/evaluation_metrics_class.html">
+       Evaluation Metrics
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Statistics
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../statistics/summary_statistics.html">
+   Summary Statistics
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Causal Inference
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../causal_inference/intro_causal_inference.html">
+   Causal Inference
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Essentials
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../essentials/markdown_math.html">
+   Markdown Maths Essential
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../essentials/elasticsearch.html">
+   Elasticsearch Percolate
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../essentials/bubble_sort.html">
+   Bubble Sort
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../essentials/selection_sort.html">
+   Selection Sort
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../../../../_sources/docs/machine_learning/preprocessing/dimensionality_reduction/feature_selection_techniques.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://gitlab.com/patilpushkarp/an-unrestrained-sage"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://gitlab.com/patilpushkarp/an-unrestrained-sage/issues/new?title=Issue%20on%20page%20%2Fdocs/machine_learning/preprocessing/dimensionality_reduction/feature_selection_techniques.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+            <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                    data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                    title="Fullscreen mode"><i
+                        class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i>
+            Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#filter-methods">
+   Filter Methods
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#basic-methods">
+     Basic Methods
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#ratio-of-missing-values">
+       Ratio of missing values
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#low-variance-filter">
+       Low variance filter
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#univariate-selection-methods">
+     Univariate selection methods
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#selectkbest">
+       SelectKBest
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#selectpercentile">
+       SelectPercentile
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#scoring-functions-for-univariate-selection-methods">
+       Scoring functions for univariate selection methods
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#high-correlation-filter">
+     High Correlation Filter
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#wrapper-methods">
+   Wrapper Methods
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#forward-selection">
+     Forward Selection
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#backward-elimination">
+     Backward Elimination
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#exhaustive-feature-selection">
+     Exhaustive Feature Selection
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#recursive-feature-elimination">
+     Recursive Feature Elimination
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#recursive-feature-elimination-with-cross-validation">
+     Recursive Feature Elimination with Cross-Validation
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#embedded-methods">
+   Embedded Methods
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#lasso-regression">
+     LASSO Regression
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#random-forest-importance">
+     Random Forest Importance
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#references">
+   References
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="techniques-of-feature-selection">
+<h1>Techniques of feature selection<a class="headerlink" href="#techniques-of-feature-selection" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="filter-methods">
+<h2>Filter Methods<a class="headerlink" href="#filter-methods" title="Permalink to this headline">¶</a></h2>
+<p>Filter methods are the most basic methods of feature selection in which no machine learning algorithm is used, instead features are selected on the basis of scores of various statistical tests for their relationship with target variable. These methods rely on the characteristics of the data. These methods are less computationally expensive. They are very well suited for a quick screen and removal of irrelevant features.</p>
+<div class="section" id="basic-methods">
+<h3>Basic Methods<a class="headerlink" href="#basic-methods" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="ratio-of-missing-values">
+<h4>Ratio of missing values<a class="headerlink" href="#ratio-of-missing-values" title="Permalink to this headline">¶</a></h4>
+<p>In this method, data columns with too many missing values is removed as such columns seldom carry any useful information. Thus data columns with missing values greater than some threshold are removed. The higher the threshold, the more aggresive the reduction.</p>
+</div>
+<div class="section" id="low-variance-filter">
+<h4>Low variance filter<a class="headerlink" href="#low-variance-filter" title="Permalink to this headline">¶</a></h4>
+<p>Data columns with little changes in the data carry little information. Thus all data columns with variance lower than a given threshold are removed. Thus this method is used to remove constant features (features that show same value or just one value for all the observations) and quasi-constant features (features that show the same value for the great majority number of the observations), as these features hold nothing to negligible amount of information. Scikit-learn has a method called <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.VarianceThreshold.html">VarianceThreshold</a> which can be used as low variance filter.</p>
+<p>!!! warning
+Variance is range dependent, hence normalization is required before applying this method.</p>
+</div>
+</div>
+<div class="section" id="univariate-selection-methods">
+<h3>Univariate selection methods<a class="headerlink" href="#univariate-selection-methods" title="Permalink to this headline">¶</a></h3>
+<p>Univariate selection methods works by selecting the best features based on univariate statistical tests like ANOVA. The methods based on F-test estimate the degree of linear dependency between two random variables i.e. they assume a linear relationship between the feature &amp; target variable and that the variables follow Gaussian distribution.</p>
+<div class="section" id="selectkbest">
+<h4>SelectKBest<a class="headerlink" href="#selectkbest" title="Permalink to this headline">¶</a></h4>
+<p>Select features according to k highest scores. <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectKBest.html#sklearn.feature_selection.SelectKBest">SelectKbest</a> in scikit-learn requires a scoring function that returns univariate score and k (number of features to be picked) as inputs.</p>
+</div>
+<div class="section" id="selectpercentile">
+<h4>SelectPercentile<a class="headerlink" href="#selectpercentile" title="Permalink to this headline">¶</a></h4>
+<p>Select features according to the percentile of the highest scores. <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectPercentile.html#sklearn.feature_selection.SelectPercentile">SelectPercentile</a> in scikit-learn requires a scoring function that returns univariate score and percentage of features to keep as inputs.</p>
+<p>!!! note
+Scoring functions from scikit-learn such as <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.chi2.html#sklearn.feature_selection.chi2">chi2</a> (Chi-square), <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.mutual_info_regression.html#sklearn.feature_selection.mutual_info_regression">mutual_info_regression</a> and <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.mutual_info_classif.html#sklearn.feature_selection.mutual_info_classif">mutual_info_classif</a> can deal with sparse data without making it dense.</p>
+<p>!!! note
+Mutual information functions, being non-parametric, require more samples for accurate estimation.</p>
+</div>
+<div class="section" id="scoring-functions-for-univariate-selection-methods">
+<h4>Scoring functions for univariate selection methods<a class="headerlink" href="#scoring-functions-for-univariate-selection-methods" title="Permalink to this headline">¶</a></h4>
+<p><strong>Mutual Information</strong> - Mutual information measures how much information the presence / absence of a feature contributes to making the correct prediction of the target variable. Mutual information between two random variables is a non-negative value, which measures the dependency between the variables. It is equal to zero if and only if two random variables are independent and higher values signifies higher dependencies.<br />
+Scikit-learn implementations -</p>
+<ul class="simple">
+<li><p>For regression - <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.mutual_info_regression.html#sklearn.feature_selection.mutual_info_regression">mutual_info_regression</a></p></li>
+<li><p>For classification - <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.mutual_info_classif.html#sklearn.feature_selection.mutual_info_classif">mutual_info_classif</a></p></li>
+</ul>
+<p>!!! warning
+Use appropriate mutual information methods from scikit-learn for regression and classification problems.</p>
+<p><em>Fischer Score</em> - It is the chi-square implementation which is usually used for categorical variables. Scikit-learn implementation - <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.chi2.html#sklearn.feature_selection.chi2">chi2</a></p>
+<p><em>ANOVA F-value</em> - Compute ANOVA F-value for the given data. It is usually used for continuous features. Scikit-learn implementation - <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.f_regression.html#sklearn.feature_selection.f_regression">f_regression</a></p>
+</div>
+</div>
+<div class="section" id="high-correlation-filter">
+<h3>High Correlation Filter<a class="headerlink" href="#high-correlation-filter" title="Permalink to this headline">¶</a></h3>
+<p>Data with similar trends are more likely to carry similar information hence such columns are also needed to be removed barring one as that 1 column will be representative of the other similar colummns. Data with similar trends can be idenitifed with correlation coefficient. Pair of columns with coefficient value greater than some threshold are reduced to one column. Variables should be highly correlated to the target and not among themselves. Correlation coefficients that can be used are -</p>
+<ul class="simple">
+<li><p>Person’s product moment coefficient (linearly dependent numerical columns)</p></li>
+<li><p>Person’s chi square value (nominal categorical columns)</p></li>
+<li><p>Spearman’s correlation coeffificent (non-linearly dependent numerical columns)</p></li>
+</ul>
+<p>!!! warning
+Correlation coefficient is scale sensitive, hence normalization is required for a meaningful correlation comparison.</p>
+</div>
+</div>
+<div class="section" id="wrapper-methods">
+<h2>Wrapper Methods<a class="headerlink" href="#wrapper-methods" title="Permalink to this headline">¶</a></h2>
+<p>In wrapper methods, features are selected based on the results from machine learning algorithms. Based on the inferences that are drawn with machine learning model, it is decided which features to keep / removed. These methods are computationally expensive.</p>
+<div class="section" id="forward-selection">
+<h3>Forward Selection<a class="headerlink" href="#forward-selection" title="Permalink to this headline">¶</a></h3>
+<p>Forward selection is an iterative method in which one feature is added at a time in order to improve the performance of the model. The process is repeated till no performance improvement is observed. Procedure usually starts with empty set of features (reduced set). The best features are identified and added to the reduced set. At each subsequent iteration, the best of the remaining original attributes is added to the reduced set. It starts with by evaluating all the features individually and selects the one that generates the best performing model (results are evaluated based on the specified evaualtion criteria) and then proceeds. This is basically a greedy approach to tackle the problem of feature selection. This pose a great problem for computation if the feature space is too high. <a class="reference external" href="http://rasbt.github.io/mlxtend/api_subpackages/mlxtend.feature_selection/#sequentialfeatureselector">SequentialFeatureSelector</a> function of <em>mlxtend</em> package can be used for the implementation. This function can be provided number of features as a stopping criteria.</p>
+</div>
+<div class="section" id="backward-elimination">
+<h3>Backward Elimination<a class="headerlink" href="#backward-elimination" title="Permalink to this headline">¶</a></h3>
+<p>Backward elimination process works in the opposite to that of forward selection. It starts with all the features and then recursively eliminates one feature at a time such that each iteration generates improved model. This process is repeated untill no more improvement in performance is observed. At each iteration, the process is eliminating the worst attribute. It can also be implemented with <a class="reference external" href="http://rasbt.github.io/mlxtend/api_subpackages/mlxtend.feature_selection/#sequentialfeatureselector">SequentialFeatureSelector</a> by setting the ‘forward’ flag to false. Similar to forward selection, number of columns can be provided as a stopping criteria.</p>
+</div>
+<div class="section" id="exhaustive-feature-selection">
+<h3>Exhaustive Feature Selection<a class="headerlink" href="#exhaustive-feature-selection" title="Permalink to this headline">¶</a></h3>
+<p>In an exhaustive feature selection the best subset of features is selected, over all possible feature subsets, by optimizing a specified performance metric for a certain machine learning algorithm. For example, if the classifier is a logistic regression and the dataset consists of 4 features, the algorithm will evaluate all 15 feature combinations as follows:</p>
+<ul class="simple">
+<li><p>all possible combinations of 1 feature</p></li>
+<li><p>all possible combinations of 2 features</p></li>
+<li><p>all possible combinations of 3 features</p></li>
+<li><p>all the 4 features<br />
+and select the one that results in the best performance of the logistic regression classifier. It is computationally too expensive and hence may not remain feasible for very high volume of feature space. <a class="reference external" href="http://rasbt.github.io/mlxtend/api_subpackages/mlxtend.feature_selection/#exhaustivefeatureselector">ExhaustiveFeatureSelector</a> of <em>mlxtend</em> package can be used for implementation of this technique.</p></li>
+</ul>
+</div>
+<div class="section" id="recursive-feature-elimination">
+<h3>Recursive Feature Elimination<a class="headerlink" href="#recursive-feature-elimination" title="Permalink to this headline">¶</a></h3>
+<p>Recursive Feature Elimination is a greedy optimization algorithm which aims to find the best performing feature subset. It repeatedly creates models and keeps aside the best or the worst performing feature at each iteration. It constructs the next model with the left features until all the features are exhausted. It then ranks the features based on the order of their elimination. <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.RFE.html#sklearn.feature_selection.RFE">RFE</a> of <em>scikit-learn</em> package can be used for the implementation.</p>
+</div>
+<div class="section" id="recursive-feature-elimination-with-cross-validation">
+<h3>Recursive Feature Elimination with Cross-Validation<a class="headerlink" href="#recursive-feature-elimination-with-cross-validation" title="Permalink to this headline">¶</a></h3>
+<p>Recursive Feature Elimination with Cross-Validated (RFECV) feature selection technique selects the best subset of features for the estimator by removing 0 to N features iteratively using recursive feature elimination. Then it selects the best subset based metric of evaluation that is provided. Recursive feature elimination technique eliminates n features from a model by fitting the model multiple times and at each step, removing the weakest features. <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.RFECV.html#sklearn.feature_selection.RFECV">RFECV</a> of <em>scikit-learn</em> package can be used for the implementation.</p>
+</div>
+</div>
+<div class="section" id="embedded-methods">
+<h2>Embedded Methods<a class="headerlink" href="#embedded-methods" title="Permalink to this headline">¶</a></h2>
+<p>Embedded methods keep track of the contribution of each feature in the iterative process of machine learning algorithm. Regularization methods are the most commonly used embedded methods which penalize a feature given a coefficient of threshold. LASSA and RIDGE are examples of embedded methods for regression.</p>
+<div class="section" id="lasso-regression">
+<h3>LASSO Regression<a class="headerlink" href="#lasso-regression" title="Permalink to this headline">¶</a></h3>
+<p>Lasso regression performs L1 regularization which adds penalty equivalent to absolute value of the magnitude of coefficients. Regularization helps avoid overfitting of machine learning models. In linear model regularisation, the penalty is applied over the coefficients that multiply each of the predictors.  From the different types of regularisation, Lasso or l1 has the property that is able to shrink some of the coefficients to zero. Therefore, that feature can be removed from the model. Lasso regularisation helps to remove non-important features from the dataset. Increasing the penalisation will result in increase the number of features removed, therefore it is necessary to select appropriate penalization. It can be observed that due to high penalisation, important features may be removed and performance of model take a hit.</p>
+</div>
+<div class="section" id="random-forest-importance">
+<h3>Random Forest Importance<a class="headerlink" href="#random-forest-importance" title="Permalink to this headline">¶</a></h3>
+<p>Random forest inherently gives preferences to columns by evaluating of the basis of measure of impurity. It makes sure that that each decision, impurity decreases. In general, features at the top of each decision tree in a random forest are given more importance because they tend to decrease more impurity. Thus random forest is capable of providing feature importance.  Knowing which features our model is giving most importance can be of vital importance to understand how our model is making it’s predictions (therefore making it more explainable). This can also help us remove features which are not benefitting our model.<br />
+In order words, create a large and carefully constructed set of trees against a target attribute and then use each attribute’s usage statsitics to find the most informative features.</p>
+<p>!!! important
+There is no best feature selection method. Choose whichever method works for the usecase under consideration.</p>
+</div>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.knime.com/blog/seven-techniques-for-data-dimensionality-reduction">Seven Techniques for Data Dimensionality Reduction</a></p></li>
+<li><p><a class="reference external" href="https://machinelearningmastery.com/dimensionality-reduction-for-machine-learning/">Introduction to Dimensionality Reduction for Machine Learning</a></p></li>
+<li><p><a class="reference external" href="https://www.geeksforgeeks.org/dimensionality-reduction/">Introduction to Dimensionality Reduction</a></p></li>
+<li><p><a class="reference external" href="https://www.kaggle.com/prashant111/comprehensive-guide-on-feature-selection">Comprehensive Guide on Feature Selection</a></p></li>
+<li><p><a class="reference external" href="https://scikit-learn.org/stable/modules/feature_selection.html">Feature selection</a></p></li>
+</ul>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./docs/machine_learning/preprocessing/dimensionality_reduction"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+        <div class='prev-next-bottom'>
+            
+    <a class='left-prev' id="prev-link" href="feature_extraction_techniques.html" title="previous page">Feature Extraction Techniques</a>
+    <a class='right-next' id="next-link" href="../../supervised_learning/supervised_learning.html" title="next page">Supervised Learning</a>
+
+        </div>
+        
+        </div>
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Pushkar Patil<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../../../../_static/js/index.d3f166471bb80abb5163.js"></script>
+
+
+    
+  </body>
+</html>

@@ -1,0 +1,2274 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Feature Tuning I - Feature Scaling &#8212; Unrestrained Sage</title>
+    
+  <link rel="stylesheet" href="../../../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../../../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../../../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/sphinx-book-theme.e7340bb3dbd8dde6db86f25597f54a1b.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../../../_static/js/index.d3f166471bb80abb5163.js">
+
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/togglebutton.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../../_static/sphinx-book-theme.7d483ff0a819d6edff12ce0b1ead3928.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../../../_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Dimensionality Reduction" href="dimensionality_reduction/dimensionality_reduction.html" />
+    <link rel="prev" title="Missing Data" href="missing_data.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../../../index.html">
+  
+  
+  <h1 class="site-logo" id="site-title">Unrestrained Sage</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../intro.html">
+   Namaste !
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Machine Learning
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../introduction_to_ml.html">
+   Machine Learning
+  </a>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../generalization/generalization.html">
+   Generalization
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generalization/k_fold_cv.html">
+     Cross Validation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generalization/data_leakage.html">
+     Data Leakage
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 current active collapsible-parent">
+  <a class="reference internal" href="preprocessing_intro.html">
+   Preprocessing
+  </a>
+  <ul class="current collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="missing_data.html">
+     Missing Data
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Feature Tuning I - Feature Scaling
+    </a>
+   </li>
+   <li class="toctree-l2 collapsible-parent">
+    <a class="reference internal" href="dimensionality_reduction/dimensionality_reduction.html">
+     Dimensionality Reduction
+    </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="dimensionality_reduction/feature_extraction_techniques.html">
+       Feature Extraction Techniques
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="dimensionality_reduction/feature_selection_techniques.html">
+       Techniques of feature selection
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../supervised_learning/supervised_learning.html">
+   Supervised Learning
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2 collapsible-parent">
+    <a class="reference internal" href="../supervised_learning/classification/classification.html">
+     Classification
+    </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="../supervised_learning/classification/logistic_regression.html">
+       Logistic Regression
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../supervised_learning/classification/evaluation_metrics_class.html">
+       Evaluation Metrics
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Statistics
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../statistics/summary_statistics.html">
+   Summary Statistics
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Causal Inference
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../causal_inference/intro_causal_inference.html">
+   Causal Inference
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Essentials
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../essentials/markdown_math.html">
+   Markdown Maths Essential
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../essentials/elasticsearch.html">
+   Elasticsearch Percolate
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../essentials/bubble_sort.html">
+   Bubble Sort
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../essentials/selection_sort.html">
+   Selection Sort
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../../../_sources/docs/machine_learning/preprocessing/feature_scaling.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://gitlab.com/patilpushkarp/an-unrestrained-sage"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://gitlab.com/patilpushkarp/an-unrestrained-sage/issues/new?title=Issue%20on%20page%20%2Fdocs/machine_learning/preprocessing/feature_scaling.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+            <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                    data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                    title="Fullscreen mode"><i
+                        class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i>
+            Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introduction-to-feature-scaling">
+   Introduction to feature scaling
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#need-for-feature-scaling">
+   Need for feature scaling
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#normalization">
+   Normalization
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#definition">
+     Definition
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#formula">
+     Formula
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#standardization">
+   Standardization
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     Definition
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id2">
+     Formula
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#normalization-vs-standardization">
+   Normalization vs Standardization
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#references">
+   References
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="feature-tuning-i-feature-scaling">
+<h1>Feature Tuning I - Feature Scaling<a class="headerlink" href="#feature-tuning-i-feature-scaling" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction-to-feature-scaling">
+<h2>Introduction to feature scaling<a class="headerlink" href="#introduction-to-feature-scaling" title="Permalink to this headline">¶</a></h2>
+<p>A dataset may have hundreds or thoudands of features and they may vary widely in terms of units used in calculating them, source of origin and data range in which they lie. Feature scaling can improve performance for certain machine learning algorithms (algorithms using gradient descent and distance-based metrics) but may work the other way around for few others (tree based algorithms which work by splitting data on single feature).<br />
+There are two widely used feature scaling methods -</p>
+<ol class="simple">
+<li><p>Normalization</p></li>
+<li><p>Standardization</p></li>
+</ol>
+</div>
+<div class="section" id="need-for-feature-scaling">
+<h2>Need for feature scaling<a class="headerlink" href="#need-for-feature-scaling" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Machine learning algorithms like linear regression, logistic regression, neural network, etc. that use gradient descent as an optimization technique require data to be scaled. Having features on a similar scale help the gradient descent converge more quickly towards the minima.</p></li>
+<li><p>Distance based algorithms such as KNN, K-means, and SVM are affected by the range of data.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Markdown</span><span class="p">,</span> <span class="n">display</span>
+
+<span class="c1"># Load training and testing data</span>
+<span class="n">train_df_with_target</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;datasets/cleaned_train.csv&quot;</span><span class="p">)</span>
+<span class="n">test_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;datasets/cleaned_test.csv&quot;</span><span class="p">)</span>
+
+<span class="c1"># Separate out the target variable as it should not be normalized or standardized</span>
+<span class="n">train_df</span> <span class="o">=</span> <span class="n">train_df_with_target</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;TARGET&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="normalization">
+<h2>Normalization<a class="headerlink" href="#normalization" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="definition">
+<h3>Definition<a class="headerlink" href="#definition" title="Permalink to this headline">¶</a></h3>
+<p>Normalization is the scaling technique in which values are shifted and scaled in such a way that all the values lie between 0 and 1. It is also known as Min-Max scaling.</p>
+</div>
+<div class="section" id="formula">
+<h3>Formula<a class="headerlink" href="#formula" title="Permalink to this headline">¶</a></h3>
+<div class="math notranslate nohighlight">
+\[
+X' = \frac{X - X_{min}}{X_{max} - X_{min}}
+\]</div>
+<p>where, <span class="math notranslate nohighlight">\(X_{min}\)</span> is the minimum value of the feature and <span class="math notranslate nohighlight">\(X_{max}\)</span> is the maximum value of the feature.</p>
+<p>Scikit-learn package has an implementation for normalizing the data and the name of the class is MinMaxScaler</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import MinMaxScaler class which will be utilized for normalization</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">MinMaxScaler</span>
+
+<span class="c1"># Instatiate an instance of MinMaxScaler class</span>
+<span class="n">normalizer</span> <span class="o">=</span> <span class="n">MinMaxScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_df</span><span class="p">)</span>
+
+<span class="c1"># Normalize training data</span>
+<span class="n">normalized_train_df</span> <span class="o">=</span> <span class="n">normalizer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_df</span><span class="p">)</span>
+
+<span class="c1"># Normalize testing data</span>
+<span class="n">normalized_test_df</span> <span class="o">=</span> <span class="n">normalizer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_df</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">normalized_train_df</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">()))</span>
+</pre></div>
+</div>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="text-align:right head"><p></p></th>
+<th class="text-align:right head"><p>0</p></th>
+<th class="text-align:right head"><p>1</p></th>
+<th class="text-align:right head"><p>2</p></th>
+<th class="text-align:right head"><p>3</p></th>
+<th class="text-align:right head"><p>4</p></th>
+<th class="text-align:right head"><p>5</p></th>
+<th class="text-align:right head"><p>6</p></th>
+<th class="text-align:right head"><p>7</p></th>
+<th class="text-align:right head"><p>8</p></th>
+<th class="text-align:right head"><p>9</p></th>
+<th class="text-align:right head"><p>10</p></th>
+<th class="text-align:right head"><p>11</p></th>
+<th class="text-align:right head"><p>12</p></th>
+<th class="text-align:right head"><p>13</p></th>
+<th class="text-align:right head"><p>14</p></th>
+<th class="text-align:right head"><p>15</p></th>
+<th class="text-align:right head"><p>16</p></th>
+<th class="text-align:right head"><p>17</p></th>
+<th class="text-align:right head"><p>18</p></th>
+<th class="text-align:right head"><p>19</p></th>
+<th class="text-align:right head"><p>20</p></th>
+<th class="text-align:right head"><p>21</p></th>
+<th class="text-align:right head"><p>22</p></th>
+<th class="text-align:right head"><p>23</p></th>
+<th class="text-align:right head"><p>24</p></th>
+<th class="text-align:right head"><p>25</p></th>
+<th class="text-align:right head"><p>26</p></th>
+<th class="text-align:right head"><p>27</p></th>
+<th class="text-align:right head"><p>28</p></th>
+<th class="text-align:right head"><p>29</p></th>
+<th class="text-align:right head"><p>30</p></th>
+<th class="text-align:right head"><p>31</p></th>
+<th class="text-align:right head"><p>32</p></th>
+<th class="text-align:right head"><p>33</p></th>
+<th class="text-align:right head"><p>34</p></th>
+<th class="text-align:right head"><p>35</p></th>
+<th class="text-align:right head"><p>36</p></th>
+<th class="text-align:right head"><p>37</p></th>
+<th class="text-align:right head"><p>38</p></th>
+<th class="text-align:right head"><p>39</p></th>
+<th class="text-align:right head"><p>40</p></th>
+<th class="text-align:right head"><p>41</p></th>
+<th class="text-align:right head"><p>42</p></th>
+<th class="text-align:right head"><p>43</p></th>
+<th class="text-align:right head"><p>44</p></th>
+<th class="text-align:right head"><p>45</p></th>
+<th class="text-align:right head"><p>46</p></th>
+<th class="text-align:right head"><p>47</p></th>
+<th class="text-align:right head"><p>48</p></th>
+<th class="text-align:right head"><p>49</p></th>
+<th class="text-align:right head"><p>50</p></th>
+<th class="text-align:right head"><p>51</p></th>
+<th class="text-align:right head"><p>52</p></th>
+<th class="text-align:right head"><p>53</p></th>
+<th class="text-align:right head"><p>54</p></th>
+<th class="text-align:right head"><p>55</p></th>
+<th class="text-align:right head"><p>56</p></th>
+<th class="text-align:right head"><p>57</p></th>
+<th class="text-align:right head"><p>58</p></th>
+<th class="text-align:right head"><p>59</p></th>
+<th class="text-align:right head"><p>60</p></th>
+<th class="text-align:right head"><p>61</p></th>
+<th class="text-align:right head"><p>62</p></th>
+<th class="text-align:right head"><p>63</p></th>
+<th class="text-align:right head"><p>64</p></th>
+<th class="text-align:right head"><p>65</p></th>
+<th class="text-align:right head"><p>66</p></th>
+<th class="text-align:right head"><p>67</p></th>
+<th class="text-align:right head"><p>68</p></th>
+<th class="text-align:right head"><p>69</p></th>
+<th class="text-align:right head"><p>70</p></th>
+<th class="text-align:right head"><p>71</p></th>
+<th class="text-align:right head"><p>72</p></th>
+<th class="text-align:right head"><p>73</p></th>
+<th class="text-align:right head"><p>74</p></th>
+<th class="text-align:right head"><p>75</p></th>
+<th class="text-align:right head"><p>76</p></th>
+<th class="text-align:right head"><p>77</p></th>
+<th class="text-align:right head"><p>78</p></th>
+<th class="text-align:right head"><p>79</p></th>
+<th class="text-align:right head"><p>80</p></th>
+<th class="text-align:right head"><p>81</p></th>
+<th class="text-align:right head"><p>82</p></th>
+<th class="text-align:right head"><p>83</p></th>
+<th class="text-align:right head"><p>84</p></th>
+<th class="text-align:right head"><p>85</p></th>
+<th class="text-align:right head"><p>86</p></th>
+<th class="text-align:right head"><p>87</p></th>
+<th class="text-align:right head"><p>88</p></th>
+<th class="text-align:right head"><p>89</p></th>
+<th class="text-align:right head"><p>90</p></th>
+<th class="text-align:right head"><p>91</p></th>
+<th class="text-align:right head"><p>92</p></th>
+<th class="text-align:right head"><p>93</p></th>
+<th class="text-align:right head"><p>94</p></th>
+<th class="text-align:right head"><p>95</p></th>
+<th class="text-align:right head"><p>96</p></th>
+<th class="text-align:right head"><p>97</p></th>
+<th class="text-align:right head"><p>98</p></th>
+<th class="text-align:right head"><p>99</p></th>
+<th class="text-align:right head"><p>100</p></th>
+<th class="text-align:right head"><p>101</p></th>
+<th class="text-align:right head"><p>102</p></th>
+<th class="text-align:right head"><p>103</p></th>
+<th class="text-align:right head"><p>104</p></th>
+<th class="text-align:right head"><p>105</p></th>
+<th class="text-align:right head"><p>106</p></th>
+<th class="text-align:right head"><p>107</p></th>
+<th class="text-align:right head"><p>108</p></th>
+<th class="text-align:right head"><p>109</p></th>
+<th class="text-align:right head"><p>110</p></th>
+<th class="text-align:right head"><p>111</p></th>
+<th class="text-align:right head"><p>112</p></th>
+<th class="text-align:right head"><p>113</p></th>
+<th class="text-align:right head"><p>114</p></th>
+<th class="text-align:right head"><p>115</p></th>
+<th class="text-align:right head"><p>116</p></th>
+<th class="text-align:right head"><p>117</p></th>
+<th class="text-align:right head"><p>118</p></th>
+<th class="text-align:right head"><p>119</p></th>
+<th class="text-align:right head"><p>120</p></th>
+<th class="text-align:right head"><p>121</p></th>
+<th class="text-align:right head"><p>122</p></th>
+<th class="text-align:right head"><p>123</p></th>
+<th class="text-align:right head"><p>124</p></th>
+<th class="text-align:right head"><p>125</p></th>
+<th class="text-align:right head"><p>126</p></th>
+<th class="text-align:right head"><p>127</p></th>
+<th class="text-align:right head"><p>128</p></th>
+<th class="text-align:right head"><p>129</p></th>
+<th class="text-align:right head"><p>130</p></th>
+<th class="text-align:right head"><p>131</p></th>
+<th class="text-align:right head"><p>132</p></th>
+<th class="text-align:right head"><p>133</p></th>
+<th class="text-align:right head"><p>134</p></th>
+<th class="text-align:right head"><p>135</p></th>
+<th class="text-align:right head"><p>136</p></th>
+<th class="text-align:right head"><p>137</p></th>
+<th class="text-align:right head"><p>138</p></th>
+<th class="text-align:right head"><p>139</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.999764</p></td>
+<td class="text-align:right"><p>0.18</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.00465382</p></td>
+<td class="text-align:right"><p>0.0201735</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.000158039</p></td>
+<td class="text-align:right"><p>5.21283e-06</p></td>
+<td class="text-align:right"><p>0.00124189</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.00154526</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:right"><p>1</p></td>
+<td class="text-align:right"><p>1.31546e-05</p></td>
+<td class="text-align:right"><p>1.3172e-05</p></td>
+<td class="text-align:right"><p>0.999764</p></td>
+<td class="text-align:right"><p>0.29</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.142857</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.00465382</p></td>
+<td class="text-align:right"><p>0.0201735</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.030303</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.000357143</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.000158039</p></td>
+<td class="text-align:right"><p>6.28458e-05</p></td>
+<td class="text-align:right"><p>0.00124189</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.000400933</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.0020025</p></td>
+</tr>
+<tr class="row-even"><td class="text-align:right"><p>2</p></td>
+<td class="text-align:right"><p>2.63092e-05</p></td>
+<td class="text-align:right"><p>1.9758e-05</p></td>
+<td class="text-align:right"><p>0.999764</p></td>
+<td class="text-align:right"><p>0.18</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1</p></td>
+<td class="text-align:right"><p>1</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.142857</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.00465864</p></td>
+<td class="text-align:right"><p>0.0201735</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.000161733</p></td>
+<td class="text-align:right"><p>5.32954e-06</p></td>
+<td class="text-align:right"><p>0.00124189</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.00282212</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:right"><p>3</p></td>
+<td class="text-align:right"><p>3.94638e-05</p></td>
+<td class="text-align:right"><p>4.61021e-05</p></td>
+<td class="text-align:right"><p>0.999764</p></td>
+<td class="text-align:right"><p>0.32</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.0151303</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1</p></td>
+<td class="text-align:right"><p>1</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1</p></td>
+<td class="text-align:right"><p>1</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.428571</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.0571429</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.00476731</p></td>
+<td class="text-align:right"><p>0.0201735</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.0005825</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.020202</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.0243902</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.0561798</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.000387139</p></td>
+<td class="text-align:right"><p>5.21283e-06</p></td>
+<td class="text-align:right"><p>0.00124189</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.00267115</p></td>
+</tr>
+<tr class="row-even"><td class="text-align:right"><p>4</p></td>
+<td class="text-align:right"><p>5.26184e-05</p></td>
+<td class="text-align:right"><p>5.92741e-05</p></td>
+<td class="text-align:right"><p>0.999764</p></td>
+<td class="text-align:right"><p>0.34</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.142857</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.00465382</p></td>
+<td class="text-align:right"><p>0.0201735</p></td>
+<td class="text-align:right"><p>0.0448802</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.010101</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1e-10</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.116885</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1</p></td>
+<td class="text-align:right"><p>1</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.0243902</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.0625</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.0166667</p></td>
+<td class="text-align:right"><p>0.0227273</p></td>
+<td class="text-align:right"><p>0.0322581</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.000161733</p></td>
+<td class="text-align:right"><p>5.40734e-06</p></td>
+<td class="text-align:right"><p>0.00124189</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.00509076</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="standardization">
+<h2>Standardization<a class="headerlink" href="#standardization" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id1">
+<h3>Definition<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>Standardization is the scaling technique in which values are shifted about mean and scaled about standard deviation. This results into 0 mean attribute and the resultant distribution has unit standard deviation.</p>
+</div>
+<div class="section" id="id2">
+<h3>Formula<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<div class="math notranslate nohighlight">
+\[
+X' = \frac{X-\mu}{\sigma}
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mu\)</span> is the mean value of the feature and <span class="math notranslate nohighlight">\(\sigma\)</span> is the standard deviation of the feature.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import StandardScaler class which will be used for standardization</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+
+<span class="c1"># Fit on training data</span>
+<span class="n">standardizer</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_df</span><span class="p">)</span>
+
+<span class="c1"># Transform the tranining data</span>
+<span class="n">standardized_train_df</span> <span class="o">=</span> <span class="n">standardizer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_df</span><span class="p">)</span>
+
+<span class="c1"># Transform the testing data</span>
+<span class="n">standardized_test_df</span> <span class="o">=</span> <span class="n">standardizer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_df</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">standardized_train_df</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">()))</span>
+</pre></div>
+</div>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="text-align:right head"><p></p></th>
+<th class="text-align:right head"><p>0</p></th>
+<th class="text-align:right head"><p>1</p></th>
+<th class="text-align:right head"><p>2</p></th>
+<th class="text-align:right head"><p>3</p></th>
+<th class="text-align:right head"><p>4</p></th>
+<th class="text-align:right head"><p>5</p></th>
+<th class="text-align:right head"><p>6</p></th>
+<th class="text-align:right head"><p>7</p></th>
+<th class="text-align:right head"><p>8</p></th>
+<th class="text-align:right head"><p>9</p></th>
+<th class="text-align:right head"><p>10</p></th>
+<th class="text-align:right head"><p>11</p></th>
+<th class="text-align:right head"><p>12</p></th>
+<th class="text-align:right head"><p>13</p></th>
+<th class="text-align:right head"><p>14</p></th>
+<th class="text-align:right head"><p>15</p></th>
+<th class="text-align:right head"><p>16</p></th>
+<th class="text-align:right head"><p>17</p></th>
+<th class="text-align:right head"><p>18</p></th>
+<th class="text-align:right head"><p>19</p></th>
+<th class="text-align:right head"><p>20</p></th>
+<th class="text-align:right head"><p>21</p></th>
+<th class="text-align:right head"><p>22</p></th>
+<th class="text-align:right head"><p>23</p></th>
+<th class="text-align:right head"><p>24</p></th>
+<th class="text-align:right head"><p>25</p></th>
+<th class="text-align:right head"><p>26</p></th>
+<th class="text-align:right head"><p>27</p></th>
+<th class="text-align:right head"><p>28</p></th>
+<th class="text-align:right head"><p>29</p></th>
+<th class="text-align:right head"><p>30</p></th>
+<th class="text-align:right head"><p>31</p></th>
+<th class="text-align:right head"><p>32</p></th>
+<th class="text-align:right head"><p>33</p></th>
+<th class="text-align:right head"><p>34</p></th>
+<th class="text-align:right head"><p>35</p></th>
+<th class="text-align:right head"><p>36</p></th>
+<th class="text-align:right head"><p>37</p></th>
+<th class="text-align:right head"><p>38</p></th>
+<th class="text-align:right head"><p>39</p></th>
+<th class="text-align:right head"><p>40</p></th>
+<th class="text-align:right head"><p>41</p></th>
+<th class="text-align:right head"><p>42</p></th>
+<th class="text-align:right head"><p>43</p></th>
+<th class="text-align:right head"><p>44</p></th>
+<th class="text-align:right head"><p>45</p></th>
+<th class="text-align:right head"><p>46</p></th>
+<th class="text-align:right head"><p>47</p></th>
+<th class="text-align:right head"><p>48</p></th>
+<th class="text-align:right head"><p>49</p></th>
+<th class="text-align:right head"><p>50</p></th>
+<th class="text-align:right head"><p>51</p></th>
+<th class="text-align:right head"><p>52</p></th>
+<th class="text-align:right head"><p>53</p></th>
+<th class="text-align:right head"><p>54</p></th>
+<th class="text-align:right head"><p>55</p></th>
+<th class="text-align:right head"><p>56</p></th>
+<th class="text-align:right head"><p>57</p></th>
+<th class="text-align:right head"><p>58</p></th>
+<th class="text-align:right head"><p>59</p></th>
+<th class="text-align:right head"><p>60</p></th>
+<th class="text-align:right head"><p>61</p></th>
+<th class="text-align:right head"><p>62</p></th>
+<th class="text-align:right head"><p>63</p></th>
+<th class="text-align:right head"><p>64</p></th>
+<th class="text-align:right head"><p>65</p></th>
+<th class="text-align:right head"><p>66</p></th>
+<th class="text-align:right head"><p>67</p></th>
+<th class="text-align:right head"><p>68</p></th>
+<th class="text-align:right head"><p>69</p></th>
+<th class="text-align:right head"><p>70</p></th>
+<th class="text-align:right head"><p>71</p></th>
+<th class="text-align:right head"><p>72</p></th>
+<th class="text-align:right head"><p>73</p></th>
+<th class="text-align:right head"><p>74</p></th>
+<th class="text-align:right head"><p>75</p></th>
+<th class="text-align:right head"><p>76</p></th>
+<th class="text-align:right head"><p>77</p></th>
+<th class="text-align:right head"><p>78</p></th>
+<th class="text-align:right head"><p>79</p></th>
+<th class="text-align:right head"><p>80</p></th>
+<th class="text-align:right head"><p>81</p></th>
+<th class="text-align:right head"><p>82</p></th>
+<th class="text-align:right head"><p>83</p></th>
+<th class="text-align:right head"><p>84</p></th>
+<th class="text-align:right head"><p>85</p></th>
+<th class="text-align:right head"><p>86</p></th>
+<th class="text-align:right head"><p>87</p></th>
+<th class="text-align:right head"><p>88</p></th>
+<th class="text-align:right head"><p>89</p></th>
+<th class="text-align:right head"><p>90</p></th>
+<th class="text-align:right head"><p>91</p></th>
+<th class="text-align:right head"><p>92</p></th>
+<th class="text-align:right head"><p>93</p></th>
+<th class="text-align:right head"><p>94</p></th>
+<th class="text-align:right head"><p>95</p></th>
+<th class="text-align:right head"><p>96</p></th>
+<th class="text-align:right head"><p>97</p></th>
+<th class="text-align:right head"><p>98</p></th>
+<th class="text-align:right head"><p>99</p></th>
+<th class="text-align:right head"><p>100</p></th>
+<th class="text-align:right head"><p>101</p></th>
+<th class="text-align:right head"><p>102</p></th>
+<th class="text-align:right head"><p>103</p></th>
+<th class="text-align:right head"><p>104</p></th>
+<th class="text-align:right head"><p>105</p></th>
+<th class="text-align:right head"><p>106</p></th>
+<th class="text-align:right head"><p>107</p></th>
+<th class="text-align:right head"><p>108</p></th>
+<th class="text-align:right head"><p>109</p></th>
+<th class="text-align:right head"><p>110</p></th>
+<th class="text-align:right head"><p>111</p></th>
+<th class="text-align:right head"><p>112</p></th>
+<th class="text-align:right head"><p>113</p></th>
+<th class="text-align:right head"><p>114</p></th>
+<th class="text-align:right head"><p>115</p></th>
+<th class="text-align:right head"><p>116</p></th>
+<th class="text-align:right head"><p>117</p></th>
+<th class="text-align:right head"><p>118</p></th>
+<th class="text-align:right head"><p>119</p></th>
+<th class="text-align:right head"><p>120</p></th>
+<th class="text-align:right head"><p>121</p></th>
+<th class="text-align:right head"><p>122</p></th>
+<th class="text-align:right head"><p>123</p></th>
+<th class="text-align:right head"><p>124</p></th>
+<th class="text-align:right head"><p>125</p></th>
+<th class="text-align:right head"><p>126</p></th>
+<th class="text-align:right head"><p>127</p></th>
+<th class="text-align:right head"><p>128</p></th>
+<th class="text-align:right head"><p>129</p></th>
+<th class="text-align:right head"><p>130</p></th>
+<th class="text-align:right head"><p>131</p></th>
+<th class="text-align:right head"><p>132</p></th>
+<th class="text-align:right head"><p>133</p></th>
+<th class="text-align:right head"><p>134</p></th>
+<th class="text-align:right head"><p>135</p></th>
+<th class="text-align:right head"><p>136</p></th>
+<th class="text-align:right head"><p>137</p></th>
+<th class="text-align:right head"><p>138</p></th>
+<th class="text-align:right head"><p>139</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-1.73203</p></td>
+<td class="text-align:right"><p>-1.73504</p></td>
+<td class="text-align:right"><p>0.0390744</p></td>
+<td class="text-align:right"><p>-0.788249</p></td>
+<td class="text-align:right"><p>-0.0533881</p></td>
+<td class="text-align:right"><p>-0.213263</p></td>
+<td class="text-align:right"><p>-0.0382065</p></td>
+<td class="text-align:right"><p>-0.0134929</p></td>
+<td class="text-align:right"><p>-0.128231</p></td>
+<td class="text-align:right"><p>-0.0117701</p></td>
+<td class="text-align:right"><p>-0.107658</p></td>
+<td class="text-align:right"><p>-0.0614522</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.20932</p></td>
+<td class="text-align:right"><p>-1.40501</p></td>
+<td class="text-align:right"><p>-0.010259</p></td>
+<td class="text-align:right"><p>-0.00512928</p></td>
+<td class="text-align:right"><p>-0.269093</p></td>
+<td class="text-align:right"><p>-0.234798</p></td>
+<td class="text-align:right"><p>-0.101355</p></td>
+<td class="text-align:right"><p>-0.00512928</p></td>
+<td class="text-align:right"><p>-0.155643</p></td>
+<td class="text-align:right"><p>-0.0730034</p></td>
+<td class="text-align:right"><p>-0.0424901</p></td>
+<td class="text-align:right"><p>-0.00512928</p></td>
+<td class="text-align:right"><p>-0.0649149</p></td>
+<td class="text-align:right"><p>-0.0603643</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.0673233</p></td>
+<td class="text-align:right"><p>-0.0655252</p></td>
+<td class="text-align:right"><p>-0.0348091</p></td>
+<td class="text-align:right"><p>-0.0273928</p></td>
+<td class="text-align:right"><p>-0.00512928</p></td>
+<td class="text-align:right"><p>-0.279161</p></td>
+<td class="text-align:right"><p>0.367953</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0434123</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-1.18677</p></td>
+<td class="text-align:right"><p>-0.0225539</p></td>
+<td class="text-align:right"><p>-0.00567625</p></td>
+<td class="text-align:right"><p>-0.0312059</p></td>
+<td class="text-align:right"><p>-0.218677</p></td>
+<td class="text-align:right"><p>-0.0772892</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.159693</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.104391</p></td>
+<td class="text-align:right"><p>-0.0561395</p></td>
+<td class="text-align:right"><p>-0.125074</p></td>
+<td class="text-align:right"><p>-0.0243331</p></td>
+<td class="text-align:right"><p>-0.00808027</p></td>
+<td class="text-align:right"><p>-0.011058</p></td>
+<td class="text-align:right"><p>-0.102845</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0157079</p></td>
+<td class="text-align:right"><p>-0.0781773</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0184641</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1.23623</p></td>
+<td class="text-align:right"><p>-0.0699353</p></td>
+<td class="text-align:right"><p>-0.0226558</p></td>
+<td class="text-align:right"><p>-0.00362693</p></td>
+<td class="text-align:right"><p>-0.0303588</p></td>
+<td class="text-align:right"><p>-0.0223633</p></td>
+<td class="text-align:right"><p>-0.0162221</p></td>
+<td class="text-align:right"><p>-0.00362693</p></td>
+<td class="text-align:right"><p>-0.007254</p></td>
+<td class="text-align:right"><p>-0.007254</p></td>
+<td class="text-align:right"><p>-0.00811027</p></td>
+<td class="text-align:right"><p>-0.00362693</p></td>
+<td class="text-align:right"><p>-0.0235115</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.111467</p></td>
+<td class="text-align:right"><p>-0.0126595</p></td>
+<td class="text-align:right"><p>-0.0131613</p></td>
+<td class="text-align:right"><p>-0.00799402</p></td>
+<td class="text-align:right"><p>-0.00491019</p></td>
+<td class="text-align:right"><p>-0.0200501</p></td>
+<td class="text-align:right"><p>-0.0121273</p></td>
+<td class="text-align:right"><p>-0.00857412</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.00362693</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0599139</p></td>
+<td class="text-align:right"><p>-0.00482896</p></td>
+<td class="text-align:right"><p>-0.00493683</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0086154</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0519995</p></td>
+<td class="text-align:right"><p>-0.267092</p></td>
+<td class="text-align:right"><p>-0.385372</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0146692</p></td>
+<td class="text-align:right"><p>-0.0187142</p></td>
+<td class="text-align:right"><p>-0.0238944</p></td>
+<td class="text-align:right"><p>-0.188906</p></td>
+<td class="text-align:right"><p>-0.376407</p></td>
+<td class="text-align:right"><p>-0.363093</p></td>
+<td class="text-align:right"><p>-0.266421</p></td>
+<td class="text-align:right"><p>-0.368213</p></td>
+<td class="text-align:right"><p>-0.224049</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.031836</p></td>
+<td class="text-align:right"><p>-0.177277</p></td>
+<td class="text-align:right"><p>-0.229084</p></td>
+<td class="text-align:right"><p>-0.102956</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.129987</p></td>
+<td class="text-align:right"><p>-0.0901414</p></td>
+<td class="text-align:right"><p>-0.0393785</p></td>
+<td class="text-align:right"><p>-0.018301</p></td>
+<td class="text-align:right"><p>-0.0660233</p></td>
+<td class="text-align:right"><p>-0.077435</p></td>
+<td class="text-align:right"><p>-0.0345129</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.00509493</p></td>
+<td class="text-align:right"><p>-0.00362693</p></td>
+<td class="text-align:right"><p>-0.0119793</p></td>
+<td class="text-align:right"><p>-0.0156501</p></td>
+<td class="text-align:right"><p>-0.0125762</p></td>
+<td class="text-align:right"><p>-0.427183</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:right"><p>1</p></td>
+<td class="text-align:right"><p>-1.73198</p></td>
+<td class="text-align:right"><p>-1.735</p></td>
+<td class="text-align:right"><p>0.0390744</p></td>
+<td class="text-align:right"><p>0.0607526</p></td>
+<td class="text-align:right"><p>-0.0533881</p></td>
+<td class="text-align:right"><p>-0.213263</p></td>
+<td class="text-align:right"><p>-0.0382065</p></td>
+<td class="text-align:right"><p>-0.0134929</p></td>
+<td class="text-align:right"><p>-0.128231</p></td>
+<td class="text-align:right"><p>-0.0117701</p></td>
+<td class="text-align:right"><p>-0.107658</p></td>
+<td class="text-align:right"><p>-0.0614522</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.20932</p></td>
+<td class="text-align:right"><p>-1.40501</p></td>
+<td class="text-align:right"><p>-0.010259</p></td>
+<td class="text-align:right"><p>-0.00512928</p></td>
+<td class="text-align:right"><p>-0.269093</p></td>
+<td class="text-align:right"><p>4.25899</p></td>
+<td class="text-align:right"><p>-0.101355</p></td>
+<td class="text-align:right"><p>-0.00512928</p></td>
+<td class="text-align:right"><p>-0.155643</p></td>
+<td class="text-align:right"><p>-0.0730034</p></td>
+<td class="text-align:right"><p>-0.0424901</p></td>
+<td class="text-align:right"><p>-0.00512928</p></td>
+<td class="text-align:right"><p>-0.0649149</p></td>
+<td class="text-align:right"><p>-0.0603643</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.0673233</p></td>
+<td class="text-align:right"><p>-0.0655252</p></td>
+<td class="text-align:right"><p>-0.0348091</p></td>
+<td class="text-align:right"><p>-0.0273928</p></td>
+<td class="text-align:right"><p>-0.00512928</p></td>
+<td class="text-align:right"><p>-0.279161</p></td>
+<td class="text-align:right"><p>0.367953</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0434123</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0873385</p></td>
+<td class="text-align:right"><p>-0.0225539</p></td>
+<td class="text-align:right"><p>-0.00567625</p></td>
+<td class="text-align:right"><p>-0.0312059</p></td>
+<td class="text-align:right"><p>-0.218677</p></td>
+<td class="text-align:right"><p>-0.0772892</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.159693</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.104391</p></td>
+<td class="text-align:right"><p>-0.0561395</p></td>
+<td class="text-align:right"><p>-0.125074</p></td>
+<td class="text-align:right"><p>-0.0243331</p></td>
+<td class="text-align:right"><p>-0.00808027</p></td>
+<td class="text-align:right"><p>-0.011058</p></td>
+<td class="text-align:right"><p>-0.102845</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0157079</p></td>
+<td class="text-align:right"><p>-0.0781773</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0184641</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.790692</p></td>
+<td class="text-align:right"><p>-0.0699353</p></td>
+<td class="text-align:right"><p>-0.0226558</p></td>
+<td class="text-align:right"><p>-0.00362693</p></td>
+<td class="text-align:right"><p>-0.0303588</p></td>
+<td class="text-align:right"><p>-0.0223633</p></td>
+<td class="text-align:right"><p>-0.0162221</p></td>
+<td class="text-align:right"><p>-0.00362693</p></td>
+<td class="text-align:right"><p>-0.007254</p></td>
+<td class="text-align:right"><p>-0.007254</p></td>
+<td class="text-align:right"><p>-0.00811027</p></td>
+<td class="text-align:right"><p>-0.00362693</p></td>
+<td class="text-align:right"><p>-0.0235115</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0996258</p></td>
+<td class="text-align:right"><p>-0.0126595</p></td>
+<td class="text-align:right"><p>-0.0131613</p></td>
+<td class="text-align:right"><p>-0.00799402</p></td>
+<td class="text-align:right"><p>-0.00491019</p></td>
+<td class="text-align:right"><p>-0.0200501</p></td>
+<td class="text-align:right"><p>-0.0121273</p></td>
+<td class="text-align:right"><p>-0.00857412</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.00362693</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0599139</p></td>
+<td class="text-align:right"><p>-0.00482896</p></td>
+<td class="text-align:right"><p>-0.00493683</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0086154</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0519995</p></td>
+<td class="text-align:right"><p>-0.267092</p></td>
+<td class="text-align:right"><p>-0.385372</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0146692</p></td>
+<td class="text-align:right"><p>-0.0187142</p></td>
+<td class="text-align:right"><p>-0.0238944</p></td>
+<td class="text-align:right"><p>-0.188906</p></td>
+<td class="text-align:right"><p>-0.376407</p></td>
+<td class="text-align:right"><p>-0.363093</p></td>
+<td class="text-align:right"><p>-0.266421</p></td>
+<td class="text-align:right"><p>-0.368213</p></td>
+<td class="text-align:right"><p>-0.224049</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.031836</p></td>
+<td class="text-align:right"><p>-0.177277</p></td>
+<td class="text-align:right"><p>-0.229084</p></td>
+<td class="text-align:right"><p>-0.102956</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.129987</p></td>
+<td class="text-align:right"><p>-0.0811522</p></td>
+<td class="text-align:right"><p>-0.0393785</p></td>
+<td class="text-align:right"><p>-0.018301</p></td>
+<td class="text-align:right"><p>-0.0660233</p></td>
+<td class="text-align:right"><p>-0.0604189</p></td>
+<td class="text-align:right"><p>-0.0345129</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.00509493</p></td>
+<td class="text-align:right"><p>-0.00362693</p></td>
+<td class="text-align:right"><p>-0.0119793</p></td>
+<td class="text-align:right"><p>-0.0156501</p></td>
+<td class="text-align:right"><p>-0.0125762</p></td>
+<td class="text-align:right"><p>-0.372038</p></td>
+</tr>
+<tr class="row-even"><td class="text-align:right"><p>2</p></td>
+<td class="text-align:right"><p>-1.73194</p></td>
+<td class="text-align:right"><p>-1.73497</p></td>
+<td class="text-align:right"><p>0.0390744</p></td>
+<td class="text-align:right"><p>-0.788249</p></td>
+<td class="text-align:right"><p>-0.0533881</p></td>
+<td class="text-align:right"><p>-0.213263</p></td>
+<td class="text-align:right"><p>-0.0382065</p></td>
+<td class="text-align:right"><p>-0.0134929</p></td>
+<td class="text-align:right"><p>-0.128231</p></td>
+<td class="text-align:right"><p>-0.0117701</p></td>
+<td class="text-align:right"><p>-0.107658</p></td>
+<td class="text-align:right"><p>-0.0614522</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.20932</p></td>
+<td class="text-align:right"><p>0.711737</p></td>
+<td class="text-align:right"><p>-0.010259</p></td>
+<td class="text-align:right"><p>-0.00512928</p></td>
+<td class="text-align:right"><p>-0.269093</p></td>
+<td class="text-align:right"><p>-0.234798</p></td>
+<td class="text-align:right"><p>-0.101355</p></td>
+<td class="text-align:right"><p>-0.00512928</p></td>
+<td class="text-align:right"><p>-0.155643</p></td>
+<td class="text-align:right"><p>-0.0730034</p></td>
+<td class="text-align:right"><p>-0.0424901</p></td>
+<td class="text-align:right"><p>-0.00512928</p></td>
+<td class="text-align:right"><p>-0.0649149</p></td>
+<td class="text-align:right"><p>-0.0603643</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.0673233</p></td>
+<td class="text-align:right"><p>-0.0655252</p></td>
+<td class="text-align:right"><p>-0.0348091</p></td>
+<td class="text-align:right"><p>-0.0273928</p></td>
+<td class="text-align:right"><p>-0.00512928</p></td>
+<td class="text-align:right"><p>-0.279161</p></td>
+<td class="text-align:right"><p>0.367953</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0434123</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0873385</p></td>
+<td class="text-align:right"><p>-0.0225539</p></td>
+<td class="text-align:right"><p>-0.00567625</p></td>
+<td class="text-align:right"><p>-0.0312059</p></td>
+<td class="text-align:right"><p>-0.218677</p></td>
+<td class="text-align:right"><p>-0.0772892</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.159693</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.104087</p></td>
+<td class="text-align:right"><p>-0.0561395</p></td>
+<td class="text-align:right"><p>-0.125074</p></td>
+<td class="text-align:right"><p>-0.0243331</p></td>
+<td class="text-align:right"><p>-0.00808027</p></td>
+<td class="text-align:right"><p>-0.011058</p></td>
+<td class="text-align:right"><p>-0.102845</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0157079</p></td>
+<td class="text-align:right"><p>-0.0781773</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0184641</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>1.23623</p></td>
+<td class="text-align:right"><p>-0.0699353</p></td>
+<td class="text-align:right"><p>-0.0226558</p></td>
+<td class="text-align:right"><p>-0.00362693</p></td>
+<td class="text-align:right"><p>-0.0303588</p></td>
+<td class="text-align:right"><p>-0.0223633</p></td>
+<td class="text-align:right"><p>-0.0162221</p></td>
+<td class="text-align:right"><p>-0.00362693</p></td>
+<td class="text-align:right"><p>-0.007254</p></td>
+<td class="text-align:right"><p>-0.007254</p></td>
+<td class="text-align:right"><p>-0.00811027</p></td>
+<td class="text-align:right"><p>-0.00362693</p></td>
+<td class="text-align:right"><p>-0.0235115</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.111467</p></td>
+<td class="text-align:right"><p>-0.0126595</p></td>
+<td class="text-align:right"><p>-0.0131613</p></td>
+<td class="text-align:right"><p>-0.00799402</p></td>
+<td class="text-align:right"><p>-0.00491019</p></td>
+<td class="text-align:right"><p>-0.0200501</p></td>
+<td class="text-align:right"><p>-0.0121273</p></td>
+<td class="text-align:right"><p>-0.00857412</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.00362693</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0599139</p></td>
+<td class="text-align:right"><p>-0.00482896</p></td>
+<td class="text-align:right"><p>-0.00493683</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0086154</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0519995</p></td>
+<td class="text-align:right"><p>-0.267092</p></td>
+<td class="text-align:right"><p>-0.385372</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0146692</p></td>
+<td class="text-align:right"><p>-0.0187142</p></td>
+<td class="text-align:right"><p>-0.0238944</p></td>
+<td class="text-align:right"><p>-0.188906</p></td>
+<td class="text-align:right"><p>-0.376407</p></td>
+<td class="text-align:right"><p>-0.363093</p></td>
+<td class="text-align:right"><p>-0.266421</p></td>
+<td class="text-align:right"><p>-0.368213</p></td>
+<td class="text-align:right"><p>-0.224049</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.031836</p></td>
+<td class="text-align:right"><p>-0.177277</p></td>
+<td class="text-align:right"><p>-0.229084</p></td>
+<td class="text-align:right"><p>-0.102956</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.12974</p></td>
+<td class="text-align:right"><p>-0.0901232</p></td>
+<td class="text-align:right"><p>-0.0393785</p></td>
+<td class="text-align:right"><p>-0.018301</p></td>
+<td class="text-align:right"><p>-0.0660233</p></td>
+<td class="text-align:right"><p>-0.077435</p></td>
+<td class="text-align:right"><p>-0.0345129</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.00509493</p></td>
+<td class="text-align:right"><p>-0.00362693</p></td>
+<td class="text-align:right"><p>-0.0119793</p></td>
+<td class="text-align:right"><p>-0.0156501</p></td>
+<td class="text-align:right"><p>-0.0125762</p></td>
+<td class="text-align:right"><p>-0.273191</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:right"><p>3</p></td>
+<td class="text-align:right"><p>-1.73189</p></td>
+<td class="text-align:right"><p>-1.73488</p></td>
+<td class="text-align:right"><p>0.0390744</p></td>
+<td class="text-align:right"><p>0.292298</p></td>
+<td class="text-align:right"><p>-0.0533881</p></td>
+<td class="text-align:right"><p>0.361427</p></td>
+<td class="text-align:right"><p>-0.0382065</p></td>
+<td class="text-align:right"><p>-0.0134929</p></td>
+<td class="text-align:right"><p>-0.128231</p></td>
+<td class="text-align:right"><p>-0.0117701</p></td>
+<td class="text-align:right"><p>-0.107658</p></td>
+<td class="text-align:right"><p>-0.0614522</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.20932</p></td>
+<td class="text-align:right"><p>0.711737</p></td>
+<td class="text-align:right"><p>-0.010259</p></td>
+<td class="text-align:right"><p>-0.00512928</p></td>
+<td class="text-align:right"><p>-0.269093</p></td>
+<td class="text-align:right"><p>-0.234798</p></td>
+<td class="text-align:right"><p>-0.101355</p></td>
+<td class="text-align:right"><p>-0.00512928</p></td>
+<td class="text-align:right"><p>-0.155643</p></td>
+<td class="text-align:right"><p>-0.0730034</p></td>
+<td class="text-align:right"><p>-0.0424901</p></td>
+<td class="text-align:right"><p>-0.00512928</p></td>
+<td class="text-align:right"><p>-0.0649149</p></td>
+<td class="text-align:right"><p>-0.0603643</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.0673233</p></td>
+<td class="text-align:right"><p>-0.0655252</p></td>
+<td class="text-align:right"><p>-0.0348091</p></td>
+<td class="text-align:right"><p>-0.0273928</p></td>
+<td class="text-align:right"><p>-0.00512928</p></td>
+<td class="text-align:right"><p>3.58216</p></td>
+<td class="text-align:right"><p>0.367953</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0434123</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>2.11153</p></td>
+<td class="text-align:right"><p>-0.0225539</p></td>
+<td class="text-align:right"><p>-0.00567625</p></td>
+<td class="text-align:right"><p>-0.0312059</p></td>
+<td class="text-align:right"><p>-0.218677</p></td>
+<td class="text-align:right"><p>-0.0772892</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>3.47609</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.097223</p></td>
+<td class="text-align:right"><p>-0.0561395</p></td>
+<td class="text-align:right"><p>-0.125074</p></td>
+<td class="text-align:right"><p>-0.0243331</p></td>
+<td class="text-align:right"><p>-0.00808027</p></td>
+<td class="text-align:right"><p>-0.011058</p></td>
+<td class="text-align:right"><p>-0.102845</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0157079</p></td>
+<td class="text-align:right"><p>-0.00414576</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0184641</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.811806</p></td>
+<td class="text-align:right"><p>-0.0699353</p></td>
+<td class="text-align:right"><p>-0.0226558</p></td>
+<td class="text-align:right"><p>-0.00362693</p></td>
+<td class="text-align:right"><p>-0.0303588</p></td>
+<td class="text-align:right"><p>-0.0223633</p></td>
+<td class="text-align:right"><p>-0.0162221</p></td>
+<td class="text-align:right"><p>-0.00362693</p></td>
+<td class="text-align:right"><p>-0.007254</p></td>
+<td class="text-align:right"><p>-0.007254</p></td>
+<td class="text-align:right"><p>-0.00811027</p></td>
+<td class="text-align:right"><p>-0.00362693</p></td>
+<td class="text-align:right"><p>-0.0235115</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.111467</p></td>
+<td class="text-align:right"><p>-0.0126595</p></td>
+<td class="text-align:right"><p>-0.0131613</p></td>
+<td class="text-align:right"><p>-0.00799402</p></td>
+<td class="text-align:right"><p>-0.00491019</p></td>
+<td class="text-align:right"><p>-0.0200501</p></td>
+<td class="text-align:right"><p>-0.0121273</p></td>
+<td class="text-align:right"><p>-0.00857412</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.00362693</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0599139</p></td>
+<td class="text-align:right"><p>-0.00482896</p></td>
+<td class="text-align:right"><p>-0.00493683</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0086154</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0519995</p></td>
+<td class="text-align:right"><p>-0.267092</p></td>
+<td class="text-align:right"><p>-0.385372</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0146692</p></td>
+<td class="text-align:right"><p>-0.0187142</p></td>
+<td class="text-align:right"><p>-0.0238944</p></td>
+<td class="text-align:right"><p>-0.188906</p></td>
+<td class="text-align:right"><p>0.493096</p></td>
+<td class="text-align:right"><p>-0.363093</p></td>
+<td class="text-align:right"><p>-0.266421</p></td>
+<td class="text-align:right"><p>1.00412</p></td>
+<td class="text-align:right"><p>-0.224049</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.031836</p></td>
+<td class="text-align:right"><p>-0.177277</p></td>
+<td class="text-align:right"><p>-0.229084</p></td>
+<td class="text-align:right"><p>-0.102956</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.114669</p></td>
+<td class="text-align:right"><p>-0.0901414</p></td>
+<td class="text-align:right"><p>-0.0393785</p></td>
+<td class="text-align:right"><p>-0.018301</p></td>
+<td class="text-align:right"><p>-0.0660233</p></td>
+<td class="text-align:right"><p>-0.077435</p></td>
+<td class="text-align:right"><p>-0.0345129</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.00509493</p></td>
+<td class="text-align:right"><p>-0.00362693</p></td>
+<td class="text-align:right"><p>-0.0119793</p></td>
+<td class="text-align:right"><p>-0.0156501</p></td>
+<td class="text-align:right"><p>-0.0125762</p></td>
+<td class="text-align:right"><p>-0.291398</p></td>
+</tr>
+<tr class="row-even"><td class="text-align:right"><p>4</p></td>
+<td class="text-align:right"><p>-1.73185</p></td>
+<td class="text-align:right"><p>-1.73484</p></td>
+<td class="text-align:right"><p>0.0390744</p></td>
+<td class="text-align:right"><p>0.446662</p></td>
+<td class="text-align:right"><p>-0.0533881</p></td>
+<td class="text-align:right"><p>-0.213263</p></td>
+<td class="text-align:right"><p>-0.0382065</p></td>
+<td class="text-align:right"><p>-0.0134929</p></td>
+<td class="text-align:right"><p>-0.128231</p></td>
+<td class="text-align:right"><p>-0.0117701</p></td>
+<td class="text-align:right"><p>-0.107658</p></td>
+<td class="text-align:right"><p>-0.0614522</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.20932</p></td>
+<td class="text-align:right"><p>-1.40501</p></td>
+<td class="text-align:right"><p>-0.010259</p></td>
+<td class="text-align:right"><p>-0.00512928</p></td>
+<td class="text-align:right"><p>3.71619</p></td>
+<td class="text-align:right"><p>-0.234798</p></td>
+<td class="text-align:right"><p>-0.101355</p></td>
+<td class="text-align:right"><p>-0.00512928</p></td>
+<td class="text-align:right"><p>-0.155643</p></td>
+<td class="text-align:right"><p>-0.0730034</p></td>
+<td class="text-align:right"><p>-0.0424901</p></td>
+<td class="text-align:right"><p>-0.00512928</p></td>
+<td class="text-align:right"><p>-0.0649149</p></td>
+<td class="text-align:right"><p>-0.0603643</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0.0673233</p></td>
+<td class="text-align:right"><p>-0.0655252</p></td>
+<td class="text-align:right"><p>-0.0348091</p></td>
+<td class="text-align:right"><p>-0.0273928</p></td>
+<td class="text-align:right"><p>-0.00512928</p></td>
+<td class="text-align:right"><p>-0.279161</p></td>
+<td class="text-align:right"><p>0.367953</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0434123</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0873385</p></td>
+<td class="text-align:right"><p>-0.0225539</p></td>
+<td class="text-align:right"><p>-0.00567625</p></td>
+<td class="text-align:right"><p>-0.0312059</p></td>
+<td class="text-align:right"><p>-0.218677</p></td>
+<td class="text-align:right"><p>-0.0772892</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.159693</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.104391</p></td>
+<td class="text-align:right"><p>-0.0561395</p></td>
+<td class="text-align:right"><p>2.67905</p></td>
+<td class="text-align:right"><p>-0.0243331</p></td>
+<td class="text-align:right"><p>-0.00808027</p></td>
+<td class="text-align:right"><p>-0.011058</p></td>
+<td class="text-align:right"><p>-0.102845</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0157079</p></td>
+<td class="text-align:right"><p>-0.0781773</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0184641</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.83292</p></td>
+<td class="text-align:right"><p>-0.0699353</p></td>
+<td class="text-align:right"><p>-0.0226558</p></td>
+<td class="text-align:right"><p>-0.00362693</p></td>
+<td class="text-align:right"><p>-0.0303588</p></td>
+<td class="text-align:right"><p>-0.0223633</p></td>
+<td class="text-align:right"><p>-0.0162221</p></td>
+<td class="text-align:right"><p>-0.00362693</p></td>
+<td class="text-align:right"><p>-0.007254</p></td>
+<td class="text-align:right"><p>-0.007254</p></td>
+<td class="text-align:right"><p>-0.00811027</p></td>
+<td class="text-align:right"><p>-0.00362693</p></td>
+<td class="text-align:right"><p>-0.0235115</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.111467</p></td>
+<td class="text-align:right"><p>-0.0126595</p></td>
+<td class="text-align:right"><p>-0.0131613</p></td>
+<td class="text-align:right"><p>-0.00799402</p></td>
+<td class="text-align:right"><p>-0.00491019</p></td>
+<td class="text-align:right"><p>-0.0200501</p></td>
+<td class="text-align:right"><p>-0.0121273</p></td>
+<td class="text-align:right"><p>-0.00857412</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.00362693</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>9.41013</p></td>
+<td class="text-align:right"><p>-0.00482896</p></td>
+<td class="text-align:right"><p>-0.00493683</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0086154</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0519995</p></td>
+<td class="text-align:right"><p>3.74403</p></td>
+<td class="text-align:right"><p>2.59489</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.0146692</p></td>
+<td class="text-align:right"><p>-0.0187142</p></td>
+<td class="text-align:right"><p>-0.0238944</p></td>
+<td class="text-align:right"><p>-0.188906</p></td>
+<td class="text-align:right"><p>0.493096</p></td>
+<td class="text-align:right"><p>-0.363093</p></td>
+<td class="text-align:right"><p>2.58475</p></td>
+<td class="text-align:right"><p>-0.368213</p></td>
+<td class="text-align:right"><p>-0.224049</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.031836</p></td>
+<td class="text-align:right"><p>1.17661</p></td>
+<td class="text-align:right"><p>1.45743</p></td>
+<td class="text-align:right"><p>2.45646</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.12974</p></td>
+<td class="text-align:right"><p>-0.090111</p></td>
+<td class="text-align:right"><p>-0.0393785</p></td>
+<td class="text-align:right"><p>-0.018301</p></td>
+<td class="text-align:right"><p>-0.0660233</p></td>
+<td class="text-align:right"><p>-0.077435</p></td>
+<td class="text-align:right"><p>-0.0345129</p></td>
+<td class="text-align:right"><p>0</p></td>
+<td class="text-align:right"><p>-0.00509493</p></td>
+<td class="text-align:right"><p>-0.00362693</p></td>
+<td class="text-align:right"><p>-0.0119793</p></td>
+<td class="text-align:right"><p>-0.0156501</p></td>
+<td class="text-align:right"><p>-0.0125762</p></td>
+<td class="text-align:right"><p>0.00041152</p></td>
+</tr>
+</tbody>
+</table>
+<p>!!! Note
+StandardScaler should only be used for numerical features.</p>
+<p>!!! Note
+Both MinMaxScaler and StandardScaler are sensitive to outliers.</p>
+</div>
+</div>
+<div class="section" id="normalization-vs-standardization">
+<h2>Normalization vs Standardization<a class="headerlink" href="#normalization-vs-standardization" title="Permalink to this headline">¶</a></h2>
+<p>There is not hard and fast rule about when to use normalization and when to use standardization. Whichever methode gives best performance after fitting the data to machine learning model should be chosen. But generally, normalization is used when we know that data does not follow Gaussian distribution and standardization is used when we know that data follow Gaussian distribution <em>(take this sentence with a pinch of salt)</em>.</p>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.analyticsvidhya.com/blog/2020/04/feature-scaling-machine-learning-normalization-standardization/">Feature Scaling for Machine Learning: Understanding the Difference Between Normalization vs. Standardization</a></p></li>
+<li><p><a class="reference external" href="https://scikit-learn.org/stable/auto_examples/preprocessing/plot_all_scaling.html#sphx-glr-auto-examples-preprocessing-plot-all-scaling-py">Compare the effect of different scalers on data with outliers</a></p></li>
+</ul>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./docs/machine_learning/preprocessing"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+        <div class='prev-next-bottom'>
+            
+    <a class='left-prev' id="prev-link" href="missing_data.html" title="previous page">Missing Data</a>
+    <a class='right-next' id="next-link" href="dimensionality_reduction/dimensionality_reduction.html" title="next page">Dimensionality Reduction</a>
+
+        </div>
+        
+        </div>
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Pushkar Patil<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../../../_static/js/index.d3f166471bb80abb5163.js"></script>
+
+
+    
+  </body>
+</html>
