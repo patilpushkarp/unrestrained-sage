@@ -1,0 +1,43 @@
+# Table of content
+# Learn more at https://jupyterbook.org/customize/toc.html
+#
+- file: intro
+
+- part: Machine Learning
+  chapters:
+  - file: docs/machine_learning/introduction_to_ml.md
+  - file: docs/machine_learning/generalization/generalization.md
+    sections:
+      - file: docs/machine_learning/generalization/k_fold_cv.md
+      - file: docs/machine_learning/generalization/data_leakage.md
+  - file: docs/machine_learning/preprocessing/preprocessing_intro.md
+    sections:
+      - file: docs/machine_learning/preprocessing/missing_data.md
+      - file: docs/machine_learning/preprocessing/feature_scaling.md
+      - file: docs/machine_learning/preprocessing/dimensionality_reduction/dimensionality_reduction.md
+        sections:
+          - file: docs/machine_learning/preprocessing/dimensionality_reduction/feature_extraction_techniques.md
+          - file: docs/machine_learning/preprocessing/dimensionality_reduction/feature_selection_techniques.md
+  - file: docs/machine_learning/supervised_learning/supervised_learning.md
+    sections:
+      - file: docs/machine_learning/supervised_learning/classification/classification.md
+        sections:
+          - file: docs/machine_learning/supervised_learning/classification/logistic_regression.md
+          - file: docs/machine_learning/supervised_learning/classification/evaluation_metrics_class.md
+
+
+- part: Statistics
+  chapters:
+  - file: docs/statistics/summary_statistics.md
+
+- part: Causal Inference
+  chapters:
+  - file: docs/causal_inference/intro_causal_inference.md
+
+- part: Essentials
+  chapters:
+  - file: docs/essentials/markdown_math.md
+  - file: docs/essentials/elasticsearch.md
+  - file: docs/essentials/bubble_sort.md
+  - file: docs/essentials/selection_sort.md
+
