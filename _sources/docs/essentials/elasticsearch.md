@@ -52,3 +52,32 @@ curl -X PUT "localhost:9200/my-index-000001/_bulk?pretty" -H 'Content-Type: appl
 {"query":{"match":{"whatever_field":"some value 3"}}}
 '
 ```
+
+## Delete an index
+
+To delete an index
+```bash
+curl -X DELETE "localhost:9200/my-index-0000001?pretty"
+```
+
+## Search a document in the index
+
+To search the document against the index 
+```bash
+curl -X GET "localhost:9200/my-index-00001/_search?pretty" -H 'Content-Type: application/json' -d'
+{
+  "query": {
+    "constant_score": {
+      "filter": {
+        "percolate": {
+          "field": "query",
+          "document": {
+            "message": "A new bonsai tree in the office"
+          }
+        }
+      }
+    }
+  }
+}
+'
+```

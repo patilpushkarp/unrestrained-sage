@@ -339,6 +339,16 @@
    Insert bulk entries into the index
   </a>
  </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#delete-an-index">
+   Delete an index
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#search-a-document-in-the-index">
+   Search a document in the index
+  </a>
+ </li>
 </ul>
 
         </nav>
@@ -401,6 +411,35 @@
 <span class="s1">{&quot;query&quot;:{&quot;match&quot;:{&quot;whatever_field&quot;:&quot;some value 2&quot;}}}</span>
 <span class="s1">{&quot;index&quot;:{&quot;_index&quot;:&quot;some_index&quot;,&quot;_type&quot;:&quot;.percolator&quot;,&quot;_id&quot;:&quot;3&quot;}}</span>
 <span class="s1">{&quot;query&quot;:{&quot;match&quot;:{&quot;whatever_field&quot;:&quot;some value 3&quot;}}}</span>
+<span class="s1">&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="delete-an-index">
+<h2>Delete an index<a class="headerlink" href="#delete-an-index" title="Permalink to this headline">¶</a></h2>
+<p>To delete an index</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl -X DELETE <span class="s2">&quot;localhost:9200/my-index-0000001?pretty&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="search-a-document-in-the-index">
+<h2>Search a document in the index<a class="headerlink" href="#search-a-document-in-the-index" title="Permalink to this headline">¶</a></h2>
+<p>To search the document against the index</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl -X GET <span class="s2">&quot;localhost:9200/my-index-00001/_search?pretty&quot;</span> -H <span class="s1">&#39;Content-Type: application/json&#39;</span> -d<span class="s1">&#39;</span>
+<span class="s1">{</span>
+<span class="s1">  &quot;query&quot;: {</span>
+<span class="s1">    &quot;constant_score&quot;: {</span>
+<span class="s1">      &quot;filter&quot;: {</span>
+<span class="s1">        &quot;percolate&quot;: {</span>
+<span class="s1">          &quot;field&quot;: &quot;query&quot;,</span>
+<span class="s1">          &quot;document&quot;: {</span>
+<span class="s1">            &quot;message&quot;: &quot;A new bonsai tree in the office&quot;</span>
+<span class="s1">          }</span>
+<span class="s1">        }</span>
+<span class="s1">      }</span>
+<span class="s1">    }</span>
+<span class="s1">  }</span>
+<span class="s1">}</span>
 <span class="s1">&#39;</span>
 </pre></div>
 </div>
