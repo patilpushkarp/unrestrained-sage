@@ -81,3 +81,7 @@ curl -X GET "localhost:9200/my-index-00001/_search?pretty" -H 'Content-Type: app
 }
 '
 ```
+
+## Limitations observed
+1. There is not suuport for fuzzy search in elasticsearch percolate
+2. No support for knowing the offsets of the indices(term) found in the document(sentence).
